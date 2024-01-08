@@ -4,12 +4,11 @@
 
 {% block body %}
 <div>
-    <h1>Listagem de séries</h1>
+    <a class="btn btn-dark mb-3" href="/series/create">Adicionar</a>
 
-    <a href="/series/create">Adicionar</a>
-    <ul>
+    <ul class="list-group">
         {% for series in seriesList %}
-            <li>{{ series }}</li>
+            <li class="list-group-item">{{ series }}</li>
         {% endfor %}
     </ul>
 </div>

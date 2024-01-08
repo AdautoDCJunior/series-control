@@ -1,12 +1,14 @@
 {% extends "base.html.twig" %}
 
-{% block title %}Formulário séries{% endblock %}
+{% block title %}Nova série{% endblock %}
 
 {% block body %}
     <form method="post">
-        <label for="name">Nome da série</label>
-        <input id="name" type="text" name="name">
+        <div class="mb-3">
+            <label class="form-label" for="name">Nome da série</label>
+            <input class="form-control" id="name" type="text" name="name">
+        </div>
 
-        <button>Adicionar</button>
+        <button class="btn btn-dark">Adicionar</button>
     </form>
 {% endblock %}
