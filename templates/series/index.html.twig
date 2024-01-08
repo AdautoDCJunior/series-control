@@ -1,0 +1,16 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Listagem de séries{% endblock %}
+
+{% block body %}
+<div>
+    <h1>Listagem de séries</h1>
+
+    <a href="/series/create">Adicionar</a>
+    <ul>
+        {% for series in seriesList %}
+            <li>{{ series }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
