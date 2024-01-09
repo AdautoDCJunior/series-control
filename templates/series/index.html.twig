@@ -4,7 +4,9 @@
 
 {% block body %}
 <div>
-    <a class="btn btn-dark mb-3" href="/series/create">Adicionar</a>
+    <a class="btn btn-dark mb-3" href="{{ path('app_add_series_form') }}">
+        Adicionar
+    </a>
 
     <ul class="list-group">
         {% for series in seriesList %}
