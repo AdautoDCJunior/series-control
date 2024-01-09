@@ -27,13 +27,13 @@ class SeriesController extends AbstractController
         ]);
     }
 
-    #[Route('/series/create', methods: ['GET'])]
+    #[Route('/series/create', 'app_add_series_form', methods: ['GET'])]
     public function addSeriesForm(): Response
     {
         return $this->render('series/form.html.twig');
     }
 
-    #[Route('/series/create', methods: ['POST'])]
+    #[Route('/series/nova', 'app_add_series', methods: ['POST'])]
     public function addSeries(Request $request): RedirectResponse
     {
         $seriesName = $request->request->get('name');
