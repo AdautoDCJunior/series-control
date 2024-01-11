@@ -10,7 +10,17 @@
 
     <ul class="list-group">
         {% for series in seriesList %}
-            <li class="list-group-item">{{ series.getName() }}</li>
+            <li class="list-group-item d-flex justify-content-between">
+                {{ series.getName() }}
+
+                <form
+                    method="post"
+                    action="{{ path('app_delete_series', { id: series.id }) }}"
+                >
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button href="#" class="btn btn-sm btn-danger">X</button>
+                </form>
+            </li>
         {% endfor %}
     </ul>
 </div>
