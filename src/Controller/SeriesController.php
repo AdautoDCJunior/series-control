@@ -16,13 +16,11 @@ class SeriesController extends AbstractController
     public function __construct(private SeriesRepository $seriesRepository) { }
 
     #[Route('/series', 'app_series', methods: ['GET'])]
-    public function getAll(): Response
+    public function getAll(Request $request): Response
     {
         $seriesList = $this->seriesRepository->findAll();
 
-        return $this->render('series/index.html.twig', [
-            'seriesList' => $seriesList,
-        ]);
+        return $this->render('series/index.html.twig', compact('seriesList'));
     }
 
     #[Route('/series/create', 'app_add_series_form', methods: ['GET'])]
@@ -31,13 +29,45 @@ class SeriesController extends AbstractController
         return $this->render('series/form.html.twig');
     }
 
-    #[Route('/series/nova', 'app_add_series', methods: ['POST'])]
+    #[Route('/series/create', 'app_add_series', methods: ['POST'])]
     public function addSeries(Request $request): RedirectResponse
     {
         $seriesName = $request->request->get('name');
         $series = new SeriesEntity($seriesName);
 
         $this->seriesRepository->add($series, true);
+
+        $this->addFlash(
+            'success',
+            "Série \"{$seriesName}\" adicionada com sucesso"
+        );
+
+        return new RedirectResponse('/series');
+    }
+
+    #[Route(
+        '/series/update/{series}',
+        'app_update_series_form',
+        methods: ['GET'])
+    ]
+    public function updateSeriesForm(SeriesEntity $series): Response
+    {
+        return $this->render('series/form.html.twig', compact('series'));
+    }
+
+    #[Route('/series/update/{series}', 'app_update_series', methods: ['PUT'])]
+    public function updateSeries(
+        SeriesEntity $series,
+        Request $request
+    ): RedirectResponse
+    {
+        $series->setName($request->request->get('name'));
+        $this->seriesRepository->flush();
+
+        $this->addFlash(
+            'success',
+            "Série \"{$series->getName()}\" editada com sucesso"
+        );
 
         return new RedirectResponse('/series');
     }
@@ -48,9 +78,11 @@ class SeriesController extends AbstractController
         ['id' => '\d+'],
         methods: ['DELETE']
     )]
-    public function deleteSeries(int $id): RedirectResponse
+    public function deleteSeries(int $id, Request $request): RedirectResponse
     {
         $this->seriesRepository->removeById($id);
+
+        $this->addFlash('success', 'Série removida com sucesso');
 
         return new RedirectResponse('/series');
     }
