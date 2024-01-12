@@ -13,6 +13,11 @@ class SeriesRepository extends ServiceEntityRepository
         parent::__construct($registry, SeriesEntity::class);
     }
 
+    public function flush(): void
+    {
+        $this->getEntityManager()->flush();
+    }
+
     public function add(SeriesEntity $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
