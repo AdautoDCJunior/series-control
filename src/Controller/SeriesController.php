@@ -4,8 +4,10 @@ namespace App\Controller;
 
 use App\Entity\SeriesEntity;
 use App\Repository\SeriesRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use SeriesType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,20 +28,22 @@ class SeriesController extends AbstractController
     #[Route('/series/create', 'app_add_series_form', methods: ['GET'])]
     public function addSeriesForm(): Response
     {
-        return $this->render('series/form.html.twig');
+        $seriesForm = $this->createForm(SeriesType::class, new SeriesEntity());
+
+        return $this->render('series/form.html.twig', compact('seriesForm'));
     }
 
     #[Route('/series/create', 'app_add_series', methods: ['POST'])]
     public function addSeries(Request $request): RedirectResponse
     {
-        $seriesName = $request->request->get('name');
-        $series = new SeriesEntity($seriesName);
+        $series = new SeriesEntity();
+        $this->createForm(SeriesType::class, $series)->handleRequest($request);
 
         $this->seriesRepository->add($series, true);
 
         $this->addFlash(
             'success',
-            "Série \"{$seriesName}\" adicionada com sucesso"
+            "Série \"{$series->getName()}\" adicionada com sucesso"
         );
 
         return new RedirectResponse('/series');

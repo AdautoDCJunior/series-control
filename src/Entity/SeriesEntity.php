@@ -18,7 +18,7 @@ class SeriesEntity
 
     public function __construct(
         #[Column]
-        private string $name
+        private string $name = ''
     ) { }
 
     public function getId(): ?int
