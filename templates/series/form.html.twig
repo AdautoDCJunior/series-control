@@ -3,31 +3,8 @@
 {% block title %}{{ series is defined ? 'Editar' : 'Nova' }} série{% endblock %}
 
 {% block body %}
-    {{ form(seriesForm) }}
-
-    <!--
-    <form
-        method="post"
-        action="{{ series is defined ? path('app_update_series', { series: series.id }) : path('app_add_series') }}"
-    >
-        {% if series is defined %}
-            <input type="hidden" name="_method" value="PUT">
-        {% endif %}
-        
-        <div class="mb-3">
-            <label class="form-label" for="name">Nome da série</label>
-            <input
-                class="form-control"
-                id="name"
-                type="text"
-                name="name"
-                value="{{ series is defined ? series.getName() : '' }}"
-            >
-        </div>
-
-        <button class="btn btn-dark">
-            {{ series is defined ? 'Editar' : 'Adicionar' }}
-        </button>
-    </form>
-    -->
+    {{ form_start(seriesForm) }}
+    {{ form_row(seriesForm.name) }}
+    {{ form_widget(seriesForm.save, {'attr': {'class': 'btn-dark'}}) }}
+    {{ form_end(seriesForm) }}
 {% endblock %}

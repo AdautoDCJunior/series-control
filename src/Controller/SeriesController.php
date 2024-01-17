@@ -34,10 +34,16 @@ class SeriesController extends AbstractController
     }
 
     #[Route('/series/create', 'app_add_series', methods: ['POST'])]
-    public function addSeries(Request $request): RedirectResponse
+    public function addSeries(Request $request): Response
     {
         $series = new SeriesEntity();
-        $this->createForm(SeriesType::class, $series)->handleRequest($request);
+        $seriesForm = $this
+            ->createForm(SeriesType::class, $series)
+            ->handleRequest($request);
+
+        if (!$seriesForm->isValid()) {
+            return $this->render('series/form.html.twig', compact('seriesForm'));
+        }
 
         $this->seriesRepository->add($series, true);
 
@@ -56,7 +62,11 @@ class SeriesController extends AbstractController
     ]
     public function updateSeriesForm(SeriesEntity $series): Response
     {
-        return $this->render('series/form.html.twig', compact('series'));
+        $seriesForm = $this
+            ->createForm(SeriesType::class, $series, ['is_edit' => true]);
+
+        return $this
+            ->render('series/form.html.twig', compact('seriesForm', 'series'));
     }
 
     #[Route('/series/update/{series}', 'app_update_series', methods: ['PUT'])]
@@ -65,7 +75,15 @@ class SeriesController extends AbstractController
         Request $request
     ): RedirectResponse
     {
-        $series->setName($request->request->get('name'));
+        $seriesForm = $this
+            ->createForm(SeriesType::class, $series, ['is_edit' => true])
+            ->handleRequest($request);
+
+        if (!$seriesForm->isValid()) {
+            return $this
+                ->render('series/form.html.twig', compact('seriesForm', 'series'));
+        }
+
         $this->seriesRepository->flush();
 
         $this->addFlash(

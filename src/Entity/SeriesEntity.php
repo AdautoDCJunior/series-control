@@ -3,21 +3,18 @@
 namespace App\Entity;
 
 use App\Repository\SeriesRepository;
-use Doctrine\ORM\Mapping\Column;
-use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\GeneratedValue;
-use Doctrine\ORM\Mapping\Id;
-use Doctrine\ORM\Mapping\Table;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
-#[Entity(SeriesRepository::class)]
-#[Table('series')]
+#[ORM\Entity(SeriesRepository::class)]
+#[ORM\Table('series')]
 class SeriesEntity
 {
-    #[Id, GeneratedValue, Column]
+    #[ORM\Id, ORM\GeneratedValue, ORM\Column]
     private int $id;
 
     public function __construct(
-        #[Column]
+        #[ORM\Column, Assert\NotBlank, Assert\Length(min: 5)]
         private string $name = ''
     ) { }
 
